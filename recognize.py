@@ -1,3 +1,4 @@
+import os
 import cv2  # 导入OpenCV库，用于图像处理
 import numpy as np  # 导入NumPy库，用于处理大型多维数组和矩阵
 from os.path import isfile, join  # 用于路径操作，例如拼接路径
@@ -117,23 +118,23 @@ def build_puzzle_matrix(_image_path, _cell_interval, _target_color, _tolerance, 
 
 
 # 遍历图片并保存结果
-def process_images_and_save_results(_folder_path, _image_prefix, _image_count, _cell_interval,
+def process_images_and_save_results(_chapter, _total_level, _cell_interval,
                                     _target_color, _tolerance, _crop_coord, _show_final_image):
-    for i in range(1, _image_count + 1):
-        # 构建文件名
-        filename = f"{_image_prefix}{str(i).zfill(3)}.jpg"
-        # 完整的文件路径
-        image_path = join(_folder_path, filename)
+    for level in range(1, _total_level + 1):
+        # 构建图片文件名
+        image_filename = f"{_chapter} - {str(level).zfill(3)}.jpg"
+        # 构建图片完整的文件路径
+        image_path = join(f'pic\\{_chapter}', image_filename)
         # 调用 build_puzzle_matrix 函数处理图片
         matrix = build_puzzle_matrix(image_path, _cell_interval, _target_color, _tolerance,
                                      _crop_coord, _show_final_image)
         # 将列表转换为 NumPy 数组
         matrix_array = np.array(matrix)
-        # 将结果保存到文件中
-        result_filename = f"{_image_prefix}{str(i).zfill(3)}.txt"
-        result_path = join(_folder_path, result_filename)
+
+        # 构建结果文本文件的文件名
+        file_name = f"txt\\{_chapter}\\{_chapter} - {str(level).zfill(3)}.txt"
         # 使用 numpy 保存数组到文本文件
-        np.savetxt(result_path, matrix_array, fmt='%d')
+        np.savetxt(file_name, matrix_array, fmt='%d')
 
 
 '''

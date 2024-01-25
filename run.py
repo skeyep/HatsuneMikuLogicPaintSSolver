@@ -17,12 +17,6 @@ crop_coord = (365, 857, 1050, 1540)
 # 15*15: 46
 # 20*20: 34
 cell_interval = 34
-# 识别图片时，图片文件夹路径
-folder_path = f'pic\\{chapter}'
-# 图片文件名前缀
-image_prefix = f'{chapter} - '
-# 图片总数量
-image_count = total_level
 
 # 循环结束后是否需要展示最终的图像
 show_final_image = False
@@ -38,22 +32,24 @@ def txt_file_exists(_level):
     return os.path.isfile(file_name)
 
 
-def main(recognize_only=False, input_only=False):
+def main(recognize_only=True, input_only=False):
     # 调用recognize.py中的函数
     # 识别图片，输出答案
     if not input_only:
         # 如果最后一关的答案都有，可以说明前关卡答案也存在
-        if not txt_file_exists(chapter):
+        if txt_file_exists(total_level):
+            print(f"{chapter}'s txt file already exists.")
+        else:
             recognize.process_images_and_save_results(
-                folder_path,
-                image_prefix,
-                image_count,
+                chapter,
+                total_level,
                 cell_interval,
                 target_color,
                 tolerance,
                 crop_coord,
                 show_final_image
             )
+            print("Create txt file successful.")
 
     # 调用input.py中的函数
     # 在游戏中进行自动化通关
@@ -74,13 +70,4 @@ def main(recognize_only=False, input_only=False):
 
 # 只有直接运行这个程序才会执行
 if __name__ == "__main__":
-    import argparse
-    parser = argparse.ArgumentParser(description='Run recognize or input processes for the game.\n'
-                                                 '运行游戏的识别图片并保存答案或自动化通关程序')
-    parser.add_argument('--recognize-only', action='store_true', help='Run only the recognize process.\n'
-                                                                      '只运行识别图片并保存答案程序')
-    parser.add_argument('--input-only', action='store_true', help='Run only the input process.\n'
-                                                                  '只运行自动化通关程序')
-    args = parser.parse_args()
-
-    main(args.recognize_only, args.input_only)
+    main()
