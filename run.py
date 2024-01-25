@@ -1,6 +1,12 @@
 import recognize
 import input
 import os
+'''
+使用说明：
+本项目在 txt 文件夹中，已经保存有Lv2、Lv3的关卡答案，可以忽略recognize脚本，因为此脚本是用来识别答案的。
+将游戏打开至关卡答题页面，调整chapter、total_level、starting_level即可开始自动化通关；
+比如，下面的默认值代表着，打开游戏至Lv3-001的答题页面，程序将自动开始答题至150关。
+'''
 
 # 章节
 chapter = "Lv3"
@@ -9,6 +15,8 @@ total_level = 150
 # 脚本开始关卡
 starting_level = 1
 
+# 谜题大小
+size = 20
 # 识别图片时，需要裁剪的坐标
 # 15*15: (360, 852, 1050, 1540)
 # 20*20: (365, 857, 1050, 1540)
@@ -32,7 +40,8 @@ def txt_file_exists(_level):
     return os.path.isfile(file_name)
 
 
-def main(recognize_only=True, input_only=False):
+# 通过recognize_only input_only来确定运行时使用哪个方法
+def main(recognize_only=False, input_only=False):
     # 调用recognize.py中的函数
     # 识别图片，输出答案
     if not input_only:
@@ -47,7 +56,8 @@ def main(recognize_only=True, input_only=False):
                 target_color,
                 tolerance,
                 crop_coord,
-                show_final_image
+                show_final_image,
+                size
             )
             print("Create txt file successful.")
 

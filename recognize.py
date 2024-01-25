@@ -1,4 +1,3 @@
-import os
 import cv2  # 导入OpenCV库，用于图像处理
 import numpy as np  # 导入NumPy库，用于处理大型多维数组和矩阵
 from os.path import isfile, join  # 用于路径操作，例如拼接路径
@@ -52,7 +51,8 @@ def draw_circle_on_cell(image, cell_center, cell_size, value, color_map={0: (0, 
 
 
 # 定义一个函数来构建谜题矩阵
-def build_puzzle_matrix(_image_path, _cell_interval, _target_color, _tolerance, _crop_coord, _show_final_image):
+def build_puzzle_matrix(_image_path, _cell_interval, _target_color, _tolerance,
+                        _crop_coord, _show_final_image, _size):
     """
     识别谜题图片，并存储为矩阵
 
@@ -81,8 +81,12 @@ def build_puzzle_matrix(_image_path, _cell_interval, _target_color, _tolerance, 
     matrix = []
     # 通过滑动窗口的方式遍历答案图片
     for y in range(0, answer_image.shape[0], _cell_interval):
+        if len(matrix) >= _size:  # 如果已经达到指定的行数，停止添加新行
+            break
         row = []
         for x in range(0, answer_image.shape[1], _cell_interval):
+            if len(row) >= _size:  # 如果已经达到指定的列数，停止添加新列
+                break
             # 确保裁剪区域不会超出图像边界
             crop_img = answer_image[y:min(y + _cell_interval, answer_image.shape[0]),
                                     x:min(x + _cell_interval, answer_image.shape[1])]
@@ -114,12 +118,17 @@ def build_puzzle_matrix(_image_path, _cell_interval, _target_color, _tolerance, 
         cv2.waitKey(0)  # 等待直到有键被按下
         cv2.destroyAllWindows()
 
+    # 如果矩阵的行数少于指定的size，补齐剩余的行
+    while len(matrix) < _size:
+        matrix.append([0] * _size)  # 由0填充
+        print("The matrix's size is less than given size.")
+
     return matrix
 
 
 # 遍历图片并保存结果
 def process_images_and_save_results(_chapter, _total_level, _cell_interval,
-                                    _target_color, _tolerance, _crop_coord, _show_final_image):
+                                    _target_color, _tolerance, _crop_coord, _show_final_image, _size):
     for level in range(1, _total_level + 1):
         # 构建图片文件名
         image_filename = f"{_chapter} - {str(level).zfill(3)}.jpg"
@@ -127,7 +136,7 @@ def process_images_and_save_results(_chapter, _total_level, _cell_interval,
         image_path = join(f'pic\\{_chapter}', image_filename)
         # 调用 build_puzzle_matrix 函数处理图片
         matrix = build_puzzle_matrix(image_path, _cell_interval, _target_color, _tolerance,
-                                     _crop_coord, _show_final_image)
+                                     _crop_coord, _show_final_image, _size)
         # 将列表转换为 NumPy 数组
         matrix_array = np.array(matrix)
 
@@ -136,21 +145,3 @@ def process_images_and_save_results(_chapter, _total_level, _cell_interval,
         # 使用 numpy 保存数组到文本文件
         np.savetxt(file_name, matrix_array, fmt='%d')
 
-
-'''
-# 定义目标颜色和容差
-target_color = (152, 143, 145)  # 目标颜色RGB值
-tolerance = 30  # 容差
-# 指定存放模板图片和答案图片的文件夹路径
-folder_path = 'pic\\lv2'
-# 设置扫描间隔大小
-cell_interval = 46
-# 图片数量
-image_count = 150
-# 前缀
-image_prefix = 'Lv2 - '
-
-
-# 处理图片并保存结果
-process_images_and_save_results(folder_path, image_prefix, image_count, cell_interval, target_color, tolerance，crop_coord, show_final_image)
-'''

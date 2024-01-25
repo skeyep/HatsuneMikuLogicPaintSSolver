@@ -71,16 +71,15 @@ def press_key(key):
 
 # 进入游戏后解谜的输入
 def simulate_controller_input(_puzzle_matrix):
-    time.sleep(1)
+    time.sleep(2)
     for row in _puzzle_matrix:
         for cell in row:
             if cell == 1:
-                # time.sleep(0.1)
-                press_key('z')  # 使用对应的键位
+                press_key('z')  # 确认
             time.sleep(0.05)
-            press_key(Key.right)  # 使用 pynput 的 Key.right 来模拟右键
-        # ztime.sleep(0.1)
-        press_key(Key.down)  # 使用 pynput 的 Key.down 来模拟下键
+            press_key(Key.right)
+        # time.sleep(0.2)
+        press_key(Key.down)
 
 
 # 打印当前所有打开的窗口
@@ -88,27 +87,3 @@ def simulate_controller_input(_puzzle_matrix):
 
 # 激活游戏窗口
 game_window_title = 'HatsuneMikuLogicPaintS'
-
-'''# 章节数
-Chapter = "Lv2"
-# Lv2有150关
-totalLevel = 150
-# 从第23关开始
-starting_level = 28
-
-if activate_window(game_window_title):
-    for level in range(starting_level, totalLevel+1):
-        # 构建文本文件名
-        file_name = f"txt\\{Chapter}\\{Chapter} - {str(level).zfill(3)}.txt"
-        if os.path.isfile(file_name):
-            # 加载谜题矩阵
-            puzzle_matrix = load_puzzle_matrix_from_file(file_name)
-            # 游戏内的输入，因此开始前要先进入starting_level关卡的游戏页面
-            simulate_controller_input(puzzle_matrix)
-            # 如果不是最后一关，切换到下一关
-            if level < totalLevel:
-                change_level(level)
-        else:
-            print(f"File {file_name} does not exist.")
-else:
-    print("Failed to activate the game window.")'''
