@@ -48,6 +48,7 @@ def draw_intervals(image, interval, color=(0, 0, 255), thickness=1):
     return image
 
 
+# 输出后的图像依次绘制圆点
 def draw_circle_on_cell(image, cell_center, cell_size, value, color_map={0: (0, 0, 255), 1: (255, 0, 0)}):
     """
     在指定的单元格中心绘制一个圆点。
@@ -83,17 +84,16 @@ def match_template(image, template, threshold):
 
 
 # 定义一个函数来构建谜题矩阵
-def build_puzzle_matrix(path, interval, threshold):
-    # 读取预先准备好的模板图片，这些图片是事先准备的，用来与游戏中的图标进行匹配
-    filled_template = cv2.imread(join(path, 'filled_template.jpg'), cv2.IMREAD_COLOR)
-    empty_template = cv2.imread(join(path, 'empty_template.jpg'), cv2.IMREAD_COLOR)
-    x_template = cv2.imread(join(path, 'x_template.jpg'), cv2.IMREAD_COLOR)
+def build_puzzle_matrix(path, interval, color, tol, threshold):
+    """
+    识别谜题图片，并存储为矩阵
 
-    # 检查模板图片是否正确加载
-    if filled_template is None or empty_template is None or x_template is None:
-        raise ValueError("One or more template images did not load correctly. Please check the file paths.\n "
-                         "一个或多个模板图像未正确加载。请检查文件路径。")
-
+    :param path: 识别图片路径
+    :param interval: 识别间距
+    :param color: 视为填充的那张图片的颜色
+    :param tol: 识别容差
+    :param threshold: 识别的阈值比例
+    """
     # 读取包含谜题答案的图片
     answer_image_full = cv2.imread(join(path, 'ans/answer.jpg'), cv2.IMREAD_COLOR)
     # 检查模板图片是否正确加载谜题答案的图片
@@ -123,27 +123,23 @@ def build_puzzle_matrix(path, interval, threshold):
                     f"Cropped image at position ({x}, {y}) is empty. Check the interval and image dimensions.\n "
                     f"({x}, {y}) 处的裁剪图像为空。检查间隔和图像尺寸。")
 
-            x_match = match_template(crop_img, x_template, threshold)
-            filled_match = match_template(crop_img, filled_template, threshold)
-            empty_match = match_template(crop_img, empty_template, threshold)
+            # 获取裁剪图像的中心点颜色，便于调试
+            center_color = crop_img[interval // 2, interval // 2]
+            print(f"Cropped image center color at ({x}, {y}): {center_color}")  # 打印中心点颜色
 
-            cell_value = 0  # 默认设置为1
-            if filled_match or empty_match:
-                cell_value = 1
-            elif x_match:
-                cell_value = 0
+            # 计算给定颜色在当前图像块中的比例
+            frequency = calculate_color_frequency(crop_img, color, tol)
+
+            # 根据比例确定单元格的值
+            cell_value = 1 if frequency >= threshold else 0
 
             row.append(cell_value)
             # 绘制圆点
             draw_circle_on_cell(answer_image_with_intervals, (x, y), interval, cell_value)
-            # 显示图像
-            cv2.imshow('Cropped Image with Intervals', answer_image_with_intervals)
-            cv2.waitKey(20)  # 暂停500毫秒
 
         if row:
             matrix.append(row)
 
-    cv2.destroyAllWindows()
     # 循环结束后展示最终的图像
     cv2.imshow('Final Image with All Circles', answer_image_with_intervals)
     cv2.waitKey(0)  # 等待直到有键被按下
@@ -152,13 +148,16 @@ def build_puzzle_matrix(path, interval, threshold):
     return matrix
 
 
+# 定义目标颜色和容差
+target_color = (191, 216, 36)  # 目标颜色RGB值
+tolerance = 5  # 容差
+threshold_ratio = 0.6  # 阈值比例
+
 # 指定存放模板图片和答案图片的文件夹路径
 folder_path = 'pic'
 # 设置扫描间隔大小
 cell_interval = 46
-# 设置阈值
-match_threshold = 0.5
 # 使用定义好的函数构建谜题矩阵
-puzzle_matrix = build_puzzle_matrix(folder_path, cell_interval, match_threshold)
+puzzle_matrix = build_puzzle_matrix(folder_path, cell_interval, target_color, tolerance, threshold_ratio)
 # 打印谜题矩阵，以便查看和调试
 print(np.array(puzzle_matrix))
