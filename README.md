@@ -1,16 +1,16 @@
-## HatsuneMikuLogicPaintSSolver 😺🎶
+# HatsuneMikuLogicPaintSSolver 😺🎶
 
 一个能自动完成《Hatsune Miku Logic Paint S》游戏中的解谜过程的脚本。
 
 A script that automates the process of solving puzzles in the Hatsune Miku Logic Paint S game.
 
-#### 概述 / Overview
+## 概述 / Overview
 
 HatsuneMikuLogicPaintSSolver 是一个基于Python的自动化工具，旨在识别谜题图案并填充它们以完成《Hatsune Miku Logic Paint S》游戏中的谜题。该工具利用计算机视觉来处理图像并存储正确答案。
 
 HatsuneMikuLogicPaintSSolver is a Python-based automation tool designed to recognize puzzle patterns and fill them in to complete puzzles from the Hatsune Miku Logic Paint S game. This tool utilizes computer vision techniques to process images and save the correct answers.
 
-#### 特点 / Features
+## 特点 / Features
 
 - 图像识别谜题答案图片 📸
 - - Image recognition for puzzle answer image 📸
@@ -21,7 +21,7 @@ HatsuneMikuLogicPaintSSolver is a Python-based automation tool designed to recog
 - 解题过程的可视化 🖼️
 - - Visualization of the solving process 🖼️
 
-#### 先决条件 / Prerequisites
+## 先决条件 / Prerequisites
 
 在开始之前，请确保您满足以下要求： 
 
@@ -33,7 +33,7 @@ Before you begin, ensure you have met the following requirements:
 - Pynput library 🖱️
 - Pygetwindow library 🪟
 
-#### 安装 / Installation
+## 安装 / Installation
 
 克隆仓库到您的本地机器：
 
@@ -51,7 +51,7 @@ Navigate to the cloned directory and install the necessary Python packages:
 pip install -r requirements.txt
 ```
 
-#### 使用方法 / Usage
+## 使用方法 / Usage
 
 要使用 HatsuneMikuLogicPaintSSolver，请按照以下步骤操作：
 
@@ -67,7 +67,7 @@ python run.py
 ```
 
 
-#### 贡献者 / Contributors
+## 贡献者 / Contributors
 
 感谢以下为该项目做出贡献的人：
 
@@ -75,7 +75,7 @@ Thanks to the following people who have contributed to this project:
 
 - Skeyep 🌟
 
-#### 联系方式 / Contact
+## 联系方式 / Contact
 
 如果您想联系我，可以通过 _skeyep@qq.com_ 找到我。 📧
 
