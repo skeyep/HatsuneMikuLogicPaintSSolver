@@ -24,4 +24,5 @@ def rename_files(directory, prefix, start_number=1):
         count += 1
 
 
-rename_files('pic/Lv2', 'Lv2 - ', 1)
+# 在这里修改需要重命名的图片文件名
+rename_files('pic/Lv3', 'Lv3 - ', 1)
