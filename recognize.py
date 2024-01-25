@@ -3,29 +3,9 @@ import numpy as np  # 导入NumPy库，用于处理大型多维数组和矩阵
 from os.path import isfile, join  # 用于路径操作，例如拼接路径
 
 
-# 通过计算目标颜色占比来判断
-def calculate_color_frequency(image, target_color, tolerance):
-    """
-    计算图像中目标颜色的频率。
-
-    :param image: 要分析的图像块。
-    :param target_color: 目标颜色的RGB值。
-    :param tolerance: 容差值。
-    :return: 目标颜色占图像块的比例。
-    """
-    # 计算与目标颜色相符的像素点数量
-    min_color = np.array([target_color[0] - tolerance, target_color[1] - tolerance, target_color[2] - tolerance])
-    max_color = np.array([target_color[0] + tolerance, target_color[1] + tolerance, target_color[2] + tolerance])
-    color_mask = cv2.inRange(image, min_color, max_color)
-    color_count = np.count_nonzero(color_mask)
-
-    # 计算图像块的总像素点数量
-    total_count = image.shape[0] * image.shape[1]
-
-    # 计算频率
-    frequency = color_count / total_count
-
-    return frequency
+# 判断颜色是否在容差范围内
+def is_color_match(center_color, target_color, tolerance):
+    return all(abs(c - t) <= tolerance for c, t in zip(center_color, target_color))
 
 
 # 输出裁剪后的图像，以便调试准确度
@@ -52,6 +32,8 @@ def draw_intervals(image, interval, color=(0, 0, 255), thickness=1):
 def draw_circle_on_cell(image, cell_center, cell_size, value, color_map={0: (0, 0, 255), 1: (255, 0, 0)}):
     """
     在指定的单元格中心绘制一个圆点。
+    蓝色点为应该填充的
+    红色点为不应填充的
 
     :param image: 要在其上绘制的图像。
     :param cell_center: 单元格的中心坐标。
@@ -127,11 +109,8 @@ def build_puzzle_matrix(path, interval, color, tol, threshold):
             center_color = crop_img[interval // 2, interval // 2]
             print(f"Cropped image center color at ({x}, {y}): {center_color}")  # 打印中心点颜色
 
-            # 计算给定颜色在当前图像块中的比例
-            frequency = calculate_color_frequency(crop_img, color, tol)
-
-            # 根据比例确定单元格的值
-            cell_value = 1 if frequency >= threshold else 0
+            # 判断中心点颜色是否与目标颜色匹配
+            cell_value = 0 if is_color_match(center_color, target_color, tolerance) else 1
 
             row.append(cell_value)
             # 绘制圆点
@@ -149,8 +128,8 @@ def build_puzzle_matrix(path, interval, color, tol, threshold):
 
 
 # 定义目标颜色和容差
-target_color = (191, 216, 36)  # 目标颜色RGB值
-tolerance = 5  # 容差
+target_color = (152, 143, 145)  # 目标颜色RGB值
+tolerance = 20  # 容差
 threshold_ratio = 0.6  # 阈值比例
 
 # 指定存放模板图片和答案图片的文件夹路径
