@@ -86,10 +86,10 @@ def simulate_controller_input(_puzzle_matrix):
 # 打印当前所有打开的窗口
 # print_open_windows()
 
-# 尝试激活游戏窗口
+# 激活游戏窗口
 game_window_title = 'HatsuneMikuLogicPaintS'
 
-# 章节数
+'''# 章节数
 Chapter = "Lv2"
 # Lv2有150关
 totalLevel = 150
@@ -111,4 +111,4 @@ if activate_window(game_window_title):
         else:
             print(f"File {file_name} does not exist.")
 else:
-    print("Failed to activate the game window.")
+    print("Failed to activate the game window.")'''

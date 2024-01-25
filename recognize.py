@@ -1,6 +1,5 @@
 import cv2  # 导入OpenCV库，用于图像处理
 import numpy as np  # 导入NumPy库，用于处理大型多维数组和矩阵
-import os
 from os.path import isfile, join  # 用于路径操作，例如拼接路径
 
 
@@ -52,7 +51,7 @@ def draw_circle_on_cell(image, cell_center, cell_size, value, color_map={0: (0, 
 
 
 # 定义一个函数来构建谜题矩阵
-def build_puzzle_matrix(_image_path, _cell_interval, _target_color, _tolerance):
+def build_puzzle_matrix(_image_path, _cell_interval, _target_color, _tolerance, _crop_coord, _show_final_image):
     """
     识别谜题图片，并存储为矩阵
 
@@ -68,13 +67,12 @@ def build_puzzle_matrix(_image_path, _cell_interval, _target_color, _tolerance):
         raise ValueError("The answer image did not load correctly. Please check the file path.\n"
                          "谜题答案的图片未正确加载。请检查文件路径。")
 
-    # 定义裁剪坐标
-    crop_start = (360, 852)
-    crop_end = (1050, 1540)
+    # 使用传入的裁剪坐标
+    crop_start = (_crop_coord[0], _crop_coord[1])
+    crop_end = (_crop_coord[2], _crop_coord[3])
     # 裁剪图片，因为默认读的图片是1080p的
     answer_image = answer_image_full[crop_start[0]:crop_end[0], crop_start[1]:crop_end[1]]
-    # 请保证裁剪后的图片能被间隔整除
-    # print("Cropped image size:", answer_image.shape)
+    # print(f"Cropped image size is {answer_image.shape}")
     # 在裁剪后的图像上按间隔画线
     answer_image_with_intervals = draw_intervals(answer_image.copy(), _cell_interval)
 
@@ -84,14 +82,19 @@ def build_puzzle_matrix(_image_path, _cell_interval, _target_color, _tolerance):
     for y in range(0, answer_image.shape[0], _cell_interval):
         row = []
         for x in range(0, answer_image.shape[1], _cell_interval):
-            crop_img = answer_image[y:y + _cell_interval, x:x + _cell_interval]
+            # 确保裁剪区域不会超出图像边界
+            crop_img = answer_image[y:min(y + _cell_interval, answer_image.shape[0]),
+                                    x:min(x + _cell_interval, answer_image.shape[1])]
             if crop_img.size == 0:
                 raise ValueError(
                     f"Cropped image at position ({x}, {y}) is empty. Check the interval and image dimensions.\n "
                     f"({x}, {y}) 处的裁剪图像为空。检查间隔和图像尺寸。")
 
             # 获取裁剪图像的中心点颜色，便于调试
-            center_color = crop_img[_cell_interval // 2, _cell_interval // 2]
+            # 获取裁剪图像的合法中心点颜色
+            center_x = min(_cell_interval // 2, crop_img.shape[1] - 1)
+            center_y = min(_cell_interval // 2, crop_img.shape[0] - 1)
+            center_color = crop_img[center_y, center_x]
             # print(f"Cropped image center color at ({x}, {y}): {center_color}")  # 打印中心点颜色
 
             # 判断中心点颜色是否与目标颜色匹配
@@ -105,22 +108,25 @@ def build_puzzle_matrix(_image_path, _cell_interval, _target_color, _tolerance):
             matrix.append(row)
 
     # 循环结束后展示最终的图像
-    '''cv2.imshow('Final Image with All Circles', answer_image_with_intervals)
-    cv2.waitKey(0)  # 等待直到有键被按下
-    cv2.destroyAllWindows()'''
+    if _show_final_image:
+        cv2.imshow('Final Image with All Circles', answer_image_with_intervals)
+        cv2.waitKey(0)  # 等待直到有键被按下
+        cv2.destroyAllWindows()
 
     return matrix
 
 
 # 遍历图片并保存结果
-def process_images_and_save_results(_folder_path, _image_prefix, _image_count, _cell_interval, _target_color, _tolerance):
+def process_images_and_save_results(_folder_path, _image_prefix, _image_count, _cell_interval,
+                                    _target_color, _tolerance, _crop_coord, _show_final_image):
     for i in range(1, _image_count + 1):
         # 构建文件名
         filename = f"{_image_prefix}{str(i).zfill(3)}.jpg"
         # 完整的文件路径
         image_path = join(_folder_path, filename)
         # 调用 build_puzzle_matrix 函数处理图片
-        matrix = build_puzzle_matrix(image_path, _cell_interval, _target_color, _tolerance)
+        matrix = build_puzzle_matrix(image_path, _cell_interval, _target_color, _tolerance,
+                                     _crop_coord, _show_final_image)
         # 将列表转换为 NumPy 数组
         matrix_array = np.array(matrix)
         # 将结果保存到文件中
@@ -130,6 +136,7 @@ def process_images_and_save_results(_folder_path, _image_prefix, _image_count, _
         np.savetxt(result_path, matrix_array, fmt='%d')
 
 
+'''
 # 定义目标颜色和容差
 target_color = (152, 143, 145)  # 目标颜色RGB值
 tolerance = 30  # 容差
@@ -142,5 +149,7 @@ image_count = 150
 # 前缀
 image_prefix = 'Lv2 - '
 
+
 # 处理图片并保存结果
-process_images_and_save_results(folder_path, image_prefix, image_count, cell_interval, target_color, tolerance)
+process_images_and_save_results(folder_path, image_prefix, image_count, cell_interval, target_color, tolerance，crop_coord, show_final_image)
+'''
