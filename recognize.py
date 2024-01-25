@@ -107,7 +107,7 @@ def build_puzzle_matrix(path, interval, color, tol, threshold):
 
             # 获取裁剪图像的中心点颜色，便于调试
             center_color = crop_img[interval // 2, interval // 2]
-            print(f"Cropped image center color at ({x}, {y}): {center_color}")  # 打印中心点颜色
+            # print(f"Cropped image center color at ({x}, {y}): {center_color}")  # 打印中心点颜色
 
             # 判断中心点颜色是否与目标颜色匹配
             cell_value = 0 if is_color_match(center_color, target_color, tolerance) else 1
@@ -120,9 +120,9 @@ def build_puzzle_matrix(path, interval, color, tol, threshold):
             matrix.append(row)
 
     # 循环结束后展示最终的图像
-    cv2.imshow('Final Image with All Circles', answer_image_with_intervals)
+    '''cv2.imshow('Final Image with All Circles', answer_image_with_intervals)
     cv2.waitKey(0)  # 等待直到有键被按下
-    cv2.destroyAllWindows()
+    cv2.destroyAllWindows()'''
 
     return matrix
 
@@ -138,5 +138,6 @@ folder_path = 'pic'
 cell_interval = 46
 # 使用定义好的函数构建谜题矩阵
 puzzle_matrix = build_puzzle_matrix(folder_path, cell_interval, target_color, tolerance, threshold_ratio)
+
 # 打印谜题矩阵，以便查看和调试
 print(np.array(puzzle_matrix))

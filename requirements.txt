@@ -3,3 +3,4 @@ pyautogui
 Pillow
 pygetwindow
 numpy
+pynput
