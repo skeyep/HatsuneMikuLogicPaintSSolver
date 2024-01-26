@@ -1,5 +1,7 @@
 # HatsuneMikuLogicPaintSSolver 😺🎶
 
+![Header](https://github.com/skeyep/HatsuneMikuLogicPaintSSolver/blob/main/pic/header.jpg)
+
 一个能自动完成《Hatsune Miku Logic Paint S》游戏中的解谜过程的脚本。
 
 A script that automates the process of solving puzzles in the Hatsune Miku Logic Paint S game.
@@ -66,6 +68,7 @@ To use HatsuneMikuLogicPaintSSolver, follow these steps:
 python run.py
 ```
 <div align="center">Level Answer Page</div>
+
 ![Level Answer Page](https://github.com/skeyep/HatsuneMikuLogicPaintSSolver/blob/main/pic/answer%20page.png)
 
 ## 贡献者 / Contributors
