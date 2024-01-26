@@ -42,7 +42,7 @@ Before you begin, ensure you have met the following requirements:
 Clone the repository to your local machine:
 
 ```bash
-git clone https://github.com/your-github-username/HatsuneMikuLogicPaintSSolver.git
+git clone https://github.com/skeyep/HatsuneMikuLogicPaintSSolver.git
 ```
 
 导航到克隆的目录并安装必要的Python包：
