@@ -57,15 +57,15 @@ pip install -r requirements.txt
 
 To use HatsuneMikuLogicPaintSSolver, follow these steps:
 
-- 更新 `run.py` 文件，为您的谜题图像设置适当的参数。
-- - Update the `run.py` file with the appropriate settings for your puzzle image.
-- 使用以下命令运行脚本：
-- - Run the script with the following command:
+- 更新 `run.py` 文件，为您的谜题图像设置适当的参数。最重要的，就是更新`chapter`、`total_level`、`starting_level`.
+- - Update the `run.py` file with the appropriate settings for your puzzle image. The most important thing is to update `chapter`、`total_level`、`starting_level`.
+- 将游戏打开至`关卡答题页面`，即可自动化答题，请使用以下命令运行脚本：
+- - Open the game to the `Level Answer Page` to automatically answer questions. Run the script with the following command:
 
 ```bash
 python run.py
 ```
-
+![Level Answer Page](https://github.com/skeyep/HatsuneMikuLogicPaintSSolver/blob/main/pic/answer%20page.png)
 
 ## 贡献者 / Contributors
 
