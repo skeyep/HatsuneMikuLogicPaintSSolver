@@ -1,4 +1,4 @@
 ﻿.idea
-pic
-cropped_image_with_intervals.jpg
 __pycache__
+pic/Lv2/*.jpg
+pic/Lv3/*.jpg
