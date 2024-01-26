@@ -65,20 +65,20 @@ def change_level(_level):
 # 模拟按键输入
 def press_key(key):
     keyboard.press(key)
-    time.sleep(0.05)
+    time.sleep(0.1)
     keyboard.release(key)
 
 
 # 进入游戏后解谜的输入
 def simulate_controller_input(_puzzle_matrix):
-    time.sleep(2)
+    time.sleep(1)
     for row in _puzzle_matrix:
         for cell in row:
             if cell == 1:
                 press_key('z')  # 确认
-            time.sleep(0.05)
+            time.sleep(0.1)
             press_key(Key.right)
-        # time.sleep(0.2)
+        time.sleep(0.05)
         press_key(Key.down)
 
 
