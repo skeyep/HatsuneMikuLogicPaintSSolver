@@ -65,6 +65,7 @@ To use HatsuneMikuLogicPaintSSolver, follow these steps:
 ```bash
 python run.py
 ```
+<div align="center">Level Answer Page</div>
 ![Level Answer Page](https://github.com/skeyep/HatsuneMikuLogicPaintSSolver/blob/main/pic/answer%20page.png)
 
 ## 贡献者 / Contributors
