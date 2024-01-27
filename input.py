@@ -37,29 +37,50 @@ def load_puzzle_matrix_from_file(_file_path):
 
 
 # 切换关卡时的按键输入
-def change_level(_level):
-    for _ in range(3):
+def change_level(_level, _chapter):
+    # 如果是特别关卡，有特别的切换方式
+    if _chapter != 'Special':
+        for _ in range(3):
+            # 按Z键确定返回菜单和确认新画作
+            press_key('z')
+            time.sleep(5)
+            # 根据关卡数切换关卡
+        if _level % 15 == 0:
+            press_key('g')
+            time.sleep(2)
+        elif _level % 5 == 0:
+            press_key(Key.down)
+            time.sleep(2)
+            for _ in range(4):
+                press_key(Key.left)
+                time.sleep(2)
+        else:
+            press_key(Key.right)
+            time.sleep(2)
+    else:
         # 按Z键确定返回菜单
         press_key('z')
         time.sleep(5)
-
-    # 然后根据关卡数切换关卡
-    if _level % 15 == 0:
-        press_key('g')
-        time.sleep(2)
-    elif _level % 5 == 0:
-        press_key(Key.down)
-        time.sleep(2)
-        for _ in range(4):
-            press_key(Key.left)
+        if _level % 25 == 0:
+            print("It's time to change page.")
+            for _ in range(2):
+                press_key('z')
+                time.sleep(5)
+            press_key('g')
             time.sleep(2)
-    else:
-        press_key(Key.right)
-        time.sleep(2)
+        elif _level % 5 == 0:
+            press_key(Key.down)
+            time.sleep(3)
+            for _ in range(4):
+                press_key(Key.left)
+                time.sleep(2)
+        else:
+            press_key(Key.right)
+            time.sleep(2)
 
     # 按Z键确认关卡切换
     press_key('z')
-    time.sleep(5)
+    time.sleep(7)
 
 
 # 模拟按键输入
@@ -80,6 +101,7 @@ def simulate_controller_input(_puzzle_matrix):
             press_key(Key.right)
         time.sleep(0.05)
         press_key(Key.down)
+    time.sleep(5)
 
 
 # 打印当前所有打开的窗口

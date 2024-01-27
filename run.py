@@ -9,22 +9,23 @@ import os
 '''
 
 # 章节
-chapter = "Lv3"
+# 'Lv2'|'Lv3'|'Special'
+chapter = "Special"
 # 总关卡数
-total_level = 150
+total_level = 200
 # 脚本开始关卡
-starting_level = 1
+starting_level = 91
 
 # 谜题大小
-size = 20
+size = 15
 # 识别图片时，需要裁剪的坐标
 # 15*15: (360, 852, 1050, 1540)
 # 20*20: (365, 857, 1050, 1540)
-crop_coord = (365, 857, 1050, 1540)
+crop_coord = (360, 852, 1050, 1540)
 # 扫描间隔大小
 # 15*15: 46
 # 20*20: 34
-cell_interval = 34
+cell_interval = 46
 
 # 循环结束后是否需要展示最终的图像
 show_final_image = False
@@ -69,9 +70,10 @@ def main(recognize_only=False, input_only=False):
                 file_name = f"txt\\{chapter}\\{chapter} - {str(level).zfill(3)}.txt"
                 if os.path.isfile(file_name):
                     puzzle_matrix = input.load_puzzle_matrix_from_file(file_name)
+                    print(f'Now we are in 「{chapter} - {level}」')
                     input.simulate_controller_input(puzzle_matrix)
                     if level < total_level:
-                        input.change_level(level)
+                        input.change_level(level, chapter)
                 else:
                     print(f"File {file_name} does not exist.")
         else:
