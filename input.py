@@ -2,7 +2,10 @@ import pygetwindow as gw  # 用于获取和操作窗口
 from pynput.keyboard import Controller, Key  # 模拟硬件输入
 import time
 import numpy as np
-import os
+
+default_delay = 0.03
+action_delay = 1
+change_page_delay = 5
 
 
 # 打印当前所有打开的窗口标题
@@ -42,66 +45,52 @@ def change_level(_level, _chapter):
     if _chapter != 'Special':
         for _ in range(3):
             # 按Z键确定返回菜单和确认新画作
-            press_key('z')
-            time.sleep(5)
+            press_key('z', change_page_delay)
             # 根据关卡数切换关卡
         if _level % 15 == 0:
-            press_key('g')
-            time.sleep(2)
+            press_key('g', action_delay)
         elif _level % 5 == 0:
-            press_key(Key.down)
-            time.sleep(2)
+            press_key(Key.down, action_delay)
             for _ in range(4):
-                press_key(Key.left)
-                time.sleep(2)
+                press_key(Key.left, action_delay)
         else:
-            press_key(Key.right)
-            time.sleep(2)
+            press_key(Key.right, action_delay)
     else:
         # 按Z键确定返回菜单
-        press_key('z')
-        time.sleep(5)
+        press_key('z', change_page_delay)
         if _level % 25 == 0:
             print("It's time to change page.")
-            for _ in range(2):
-                press_key('z')
-                time.sleep(5)
-            press_key('g')
-            time.sleep(2)
+            press_key('z', change_page_delay)
+            press_key('g', change_page_delay)
         elif _level % 5 == 0:
-            press_key(Key.down)
-            time.sleep(3)
+            press_key(Key.down, action_delay)
             for _ in range(4):
-                press_key(Key.left)
-                time.sleep(2)
+                press_key(Key.left, action_delay)
         else:
-            press_key(Key.right)
-            time.sleep(2)
+            press_key(Key.right, action_delay)
 
     # 按Z键确认关卡切换
-    press_key('z')
-    time.sleep(7)
+    press_key('z', change_page_delay)
 
 
 # 模拟按键输入
-def press_key(key):
-    keyboard.press(key)
-    time.sleep(0.1)
-    keyboard.release(key)
+def press_key(_key, _delay=default_delay):
+    keyboard.press(_key)
+    time.sleep(default_delay)
+    keyboard.release(_key)
+    time.sleep(_delay)
 
 
 # 进入游戏后解谜的输入
 def simulate_controller_input(_puzzle_matrix):
-    time.sleep(1)
+    press_key('q')
     for row in _puzzle_matrix:
         for cell in row:
             if cell == 1:
-                press_key('z')  # 确认
-            time.sleep(0.1)
+                press_key('z')
             press_key(Key.right)
-        time.sleep(0.05)
         press_key(Key.down)
-    time.sleep(5)
+    time.sleep(change_page_delay)
 
 
 # 打印当前所有打开的窗口
